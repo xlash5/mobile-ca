@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, Button } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Palette from '../theme/Palette';
 
 function ProfileScreen({ navigation }) {
     return (
@@ -10,6 +11,7 @@ function ProfileScreen({ navigation }) {
                 onPress={() => {
                     navigation.navigate('First');
                 }}
+                color={Palette.tirdiary}
                 title="GO" />
         </View>
     );
@@ -22,6 +24,7 @@ function FirstScreen({ navigation }) {
                 onPress={() => {
                     navigation.navigate('Second');
                 }}
+                color={Palette.tirdiary}
                 title="GO" />
         </View>
     );

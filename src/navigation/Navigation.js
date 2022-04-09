@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ProfileStack from './ProfileStack';
+import Palette from '../theme/Palette';
 
 function HomeScreen() {
     return (
@@ -42,7 +43,7 @@ export default function Navigation() {
                         // You can return any component that you like here!
                         return <Ionicons name={iconName} size={size} color={color} />;
                     },
-                    tabBarActiveTintColor: 'tomato',
+                    tabBarActiveTintColor: Palette.tirdiary,
                     tabBarInactiveTintColor: 'gray',
                     headerShown: false,
                 })}
