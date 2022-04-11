@@ -1,6 +1,6 @@
 export default {
-    "primary": "#E6BA95",
+    "primary": "#FF7300",
     "secondary": "#E4E9BE",
-    "tirdiary": "#A2B38B",
+    "tirdiary": "#84A25A",
     "background": "#FAFDD6",
 }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View } from 'react-native';
+import { Button } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import Palette from '../theme/Palette';
 
@@ -11,8 +12,10 @@ function ProfileScreen({ navigation }) {
                 onPress={() => {
                     navigation.navigate('First');
                 }}
-                color={Palette.tirdiary}
-                title="GO" />
+                mode="contained"
+                color={Palette.primary}>
+                Go to first screen
+            </Button>
         </View>
     );
 }
@@ -24,8 +27,8 @@ function FirstScreen({ navigation }) {
                 onPress={() => {
                     navigation.navigate('Second');
                 }}
-                color={Palette.tirdiary}
-                title="GO" />
+                mode="contained"
+                color={Palette.primary}>GO</Button>
         </View>
     );
 }

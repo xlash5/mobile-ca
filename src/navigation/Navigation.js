@@ -32,24 +32,25 @@ export default function Navigation() {
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
 
-                        if (route.name === 'Home') {
+                        if (route.name === 'Texts') {
                             iconName = focused
-                                ? 'information-circle'
-                                : 'information-circle-outline';
-                        } else if (route.name === 'Profile') {
-                            iconName = focused ? 'person' : 'person-outline';
+                                ? 'pencil'
+                                : 'pencil-outline';
+                        } else if (route.name === 'Images') {
+                            iconName = focused ? 'image' : 'image-outline';
                         }
 
                         // You can return any component that you like here!
-                        return <Ionicons name={iconName} size={size} color={color} />;
+                        return <Ionicons name={iconName} size={32} color={color} />;
                     },
-                    tabBarActiveTintColor: Palette.tirdiary,
+                    tabBarActiveTintColor: Palette.primary,
                     tabBarInactiveTintColor: 'gray',
+                    tabBarLabelStyle: { fontSize: 12, fontWeight: 'bold' },
                     headerShown: false,
                 })}
             >
-                <Tab.Screen name="Home" component={HomeScreen} />
-                <Tab.Screen name="Profile" component={ProfileStack} />
+                <Tab.Screen name="Texts" component={HomeScreen} />
+                <Tab.Screen name="Images" component={ProfileStack} />
             </Tab.Navigator>
         </NavigationContainer>
     );
