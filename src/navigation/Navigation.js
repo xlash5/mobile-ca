@@ -4,7 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ProfileStack from './ProfileStack';
+import AuthenticationStack from './AuthenticationStack';
 import Palette from '../theme/Palette';
+import auth from '@react-native-firebase/auth';
 
 function HomeScreen() {
     return (
@@ -14,17 +16,17 @@ function HomeScreen() {
     );
 }
 
-function SettingsScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Settings!</Text>
-        </View>
-    );
-}
-
 const Tab = createBottomTabNavigator();
 
 export default function Navigation() {
+    if (!auth().currentUser) {
+        return (
+            <NavigationContainer>
+                <AuthenticationStack />
+            </NavigationContainer>
+        );
+    }
+
     return (
         <NavigationContainer>
             <Tab.Navigator

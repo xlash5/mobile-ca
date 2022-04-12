@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:728354913288:android:6bbb0e967b3135c9fe25bd",
+        "mobilesdk_app_id": "1:728354913288:android:739fe90791551795fe25bd",
         "android_client_info": {
-          "package_name": "com.enes.mobileCA"
+          "package_name": "com.mobileca"
         }
       },
       "oauth_client": [
