@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -7,6 +7,7 @@ import ProfileStack from './ProfileStack';
 import AuthenticationStack from './AuthenticationStack';
 import Palette from '../theme/Palette';
 import auth from '@react-native-firebase/auth';
+import LottieView from 'lottie-react-native';
 
 function HomeScreen() {
     return (
@@ -19,6 +20,16 @@ function HomeScreen() {
 const Tab = createBottomTabNavigator();
 
 export default function Navigation() {
+    const [showSplashScreen, setShowSplashScreen] = useState(true);
+    useEffect(() => {
+        setTimeout(() => { setShowSplashScreen(false) }, 3000);
+    });
+
+    if (showSplashScreen) {
+        return <LottieView source={require('../assets/animations/splash.json')} autoPlay loop={false} />
+    }
+
+
     if (!auth().currentUser) {
         return (
             <NavigationContainer>
