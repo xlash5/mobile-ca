@@ -8,11 +8,24 @@ import AuthenticationStack from './AuthenticationStack';
 import Palette from '../theme/Palette';
 import auth from '@react-native-firebase/auth';
 import LottieView from 'lottie-react-native';
+import { Button } from 'react-native-paper';
 
 function HomeScreen() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Home!</Text>
+            <Button
+                mode="contained"
+                onPress={() => {
+                    auth().signOut().then(() => {
+                        console.log("Logout Success");
+                    }).catch(error => {
+                        console.log(error)
+                    });
+                }}
+                color={Palette.primary}>
+                SignOut
+            </Button>
         </View>
     );
 }
@@ -21,16 +34,28 @@ const Tab = createBottomTabNavigator();
 
 export default function Navigation() {
     const [showSplashScreen, setShowSplashScreen] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
+
     useEffect(() => {
         setTimeout(() => { setShowSplashScreen(false) }, 3000);
     });
+
+    useEffect(() => {
+        auth().onAuthStateChanged((user) => {
+            if (user) {
+                setLoggedIn(true);
+            } else {
+                setLoggedIn(false);
+            }
+        });
+    }, [auth()])
 
     if (showSplashScreen) {
         return <LottieView source={require('../assets/animations/splash.json')} autoPlay loop={false} />
     }
 
 
-    if (!auth().currentUser) {
+    if (!loggedIn) {
         return (
             <NavigationContainer>
                 <AuthenticationStack />
