@@ -19,8 +19,10 @@ const SignUpScreen = () => {
             return;
         }
         auth()
-            .createUserWithEmailAndPassword(email, password).then(() => {
-                console.log("SignUp Success");
+            .createUserWithEmailAndPassword(email, password).then((result) => {
+                result.user.updateProfile({ displayName: 'name here' }).then(() => {
+                    console.log("SignUp Success");
+                }).catch((e) => { console.log(e) });
             }).catch(error => {
                 setError(true);
                 console.log(error);
