@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import Palette from '../theme/Palette';
-import Images from '../screens/main/Images';
+import ImagesScreen from '../screens/main/ImagesScreen';
 
 function FirstScreen({ navigation }) {
     return (
@@ -31,7 +31,7 @@ const Stack = createStackNavigator();
 export default function ImageStack() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="ProfileHome" component={Images} options={{ headerShown: true }} />
+            <Stack.Screen name="ProfileHome" component={ImagesScreen} options={{ headerShown: true }} />
             <Stack.Screen name="First" component={FirstScreen} />
             <Stack.Screen name="Second" component={SecondScreen} />
         </Stack.Navigator>
