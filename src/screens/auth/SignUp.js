@@ -8,19 +8,20 @@ import auth from '@react-native-firebase/auth';
 import RedText from '../../components/RedText';
 
 const SignUpScreen = () => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordRepeat, setPasswordRepeat] = useState('');
     const [error, setError] = useState(false);
 
     const SignUpEvent = () => {
-        if (password !== passwordRepeat) {
+        if (password !== passwordRepeat || (password || passwordRepeat || username || email) === '' || null) {
             setError(true);
             return;
         }
         auth()
             .createUserWithEmailAndPassword(email, password).then((result) => {
-                result.user.updateProfile({ displayName: 'name here' }).then(() => {
+                result.user.updateProfile({ displayName: username }).then(() => {
                     console.log("SignUp Success");
                 }).catch((e) => { console.log(e) });
             }).catch(error => {
@@ -32,6 +33,12 @@ const SignUpScreen = () => {
         <Screen>
             <AuthCard>
                 <ScrollView>
+                    <TextInput
+                        style={styles.marginVertical}
+                        label="Username"
+                        value={username}
+                        onChangeText={t => setUsername(t)}
+                    />
                     <TextInput
                         style={styles.marginVertical}
                         label="Email"

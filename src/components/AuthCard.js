@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
         height: '80%',
         backgroundColor: Palette.secondary,
         borderRadius: 10,
-        paddingTop: 50.0,
         paddingHorizontal: 20.0,
     },
 })

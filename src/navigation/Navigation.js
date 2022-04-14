@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import ProfileStack from './ProfileStack';
+import ImageStack from './ImageStack';
 import AuthenticationStack from './AuthenticationStack';
 import Palette from '../theme/Palette';
 import auth from '@react-native-firebase/auth';
@@ -13,7 +13,7 @@ import { Button } from 'react-native-paper';
 function HomeScreen() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Home!</Text>
+            <Text>Home! {auth().currentUser.displayName}</Text>
             <Button
                 mode="contained"
                 onPress={() => {
@@ -88,7 +88,7 @@ export default function Navigation() {
                 })}
             >
                 <Tab.Screen name="Texts" component={HomeScreen} />
-                <Tab.Screen name="Images" component={ProfileStack} />
+                <Tab.Screen name="Images" component={ImageStack} />
             </Tab.Navigator>
         </NavigationContainer>
     );

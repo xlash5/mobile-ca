@@ -3,22 +3,8 @@ import { Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import Palette from '../theme/Palette';
+import Images from '../screens/main/Images';
 
-function ProfileScreen({ navigation }) {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Profile!</Text>
-            <Button
-                onPress={() => {
-                    navigation.navigate('First');
-                }}
-                mode="contained"
-                color={Palette.primary}>
-                Go to first screen
-            </Button>
-        </View>
-    );
-}
 function FirstScreen({ navigation }) {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -42,10 +28,10 @@ function SecondScreen() {
 
 const Stack = createStackNavigator();
 
-export default function ProfileStack() {
+export default function ImageStack() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="ProfileHome" component={ProfileScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="ProfileHome" component={Images} options={{ headerShown: true }} />
             <Stack.Screen name="First" component={FirstScreen} />
             <Stack.Screen name="Second" component={SecondScreen} />
         </Stack.Navigator>
