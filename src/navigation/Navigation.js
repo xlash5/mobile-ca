@@ -8,27 +8,8 @@ import AuthenticationStack from './AuthenticationStack';
 import Palette from '../theme/Palette';
 import auth from '@react-native-firebase/auth';
 import LottieView from 'lottie-react-native';
-import { Button } from 'react-native-paper';
-
-function HomeScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Home! {auth().currentUser.displayName}</Text>
-            <Button
-                mode="contained"
-                onPress={() => {
-                    auth().signOut().then(() => {
-                        console.log("Logout Success");
-                    }).catch(error => {
-                        console.log(error)
-                    });
-                }}
-                color={Palette.primary}>
-                SignOut
-            </Button>
-        </View>
-    );
-}
+import HomeScreen from '../screens/main/HomeScreen';
+import LogoutButtonOptions from '../constants/LogoutButtonOptions';
 
 const Tab = createBottomTabNavigator();
 
@@ -70,10 +51,10 @@ export default function Navigation() {
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
 
-                        if (route.name === 'Texts') {
+                        if (route.name === 'Home') {
                             iconName = focused
-                                ? 'pencil'
-                                : 'pencil-outline';
+                                ? 'home'
+                                : 'home-outline';
                         } else if (route.name === 'Images') {
                             iconName = focused ? 'image' : 'image-outline';
                         }
@@ -87,7 +68,7 @@ export default function Navigation() {
                     headerShown: false,
                 })}
             >
-                <Tab.Screen name="Texts" component={HomeScreen} />
+                <Tab.Screen name="Home" component={HomeScreen} options={LogoutButtonOptions} />
                 <Tab.Screen name="Images" component={ImageStack} />
             </Tab.Navigator>
         </NavigationContainer>

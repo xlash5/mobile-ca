@@ -3,7 +3,8 @@ import { createStackNavigator, Header } from '@react-navigation/stack';
 import LoginScreen from '../screens/auth/Login';
 import SignUpScreen from '../screens/auth/SignUp';
 import Palette from '../theme/Palette';
-import HeaderOptions from '../theme/HeaderOptions';
+import HeaderOptions from '../constants/HeaderOptions';
+
 
 const Stack = createStackNavigator();
 
