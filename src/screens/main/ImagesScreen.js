@@ -10,6 +10,7 @@ import ImageButton from '../../components/ImageButton';
 import GetLocation from 'react-native-get-location'
 import API_KEY from '../../constants/API_KEY';
 import axios from 'axios';
+import { Notifications } from 'react-native-notifications';
 
 const ImagesScreen = ({ navigation }) => {
     const [image, setImage] = useState(null);
@@ -86,6 +87,12 @@ const ImagesScreen = ({ navigation }) => {
                                 .then(() => {
                                     fetchImageData();
                                     console.log('Image Added!');
+                                    Notifications.postLocalNotification({
+                                        body: "Your image has been uploaded!",
+                                        title: "Uploaded!",
+                                        sound: "chime.aiff",
+                                        fireDate: new Date(),
+                                    });
                                     Vibration.vibrate(3000);
                                 }).catch(err => { console.log(err) });
                         }).catch(err => { console.log(err) });
@@ -120,6 +127,12 @@ const ImagesScreen = ({ navigation }) => {
                                 .then(() => {
                                     fetchImageData();
                                     console.log('Image Added!');
+                                    Notifications.postLocalNotification({
+                                        body: "Your image has been uploaded!",
+                                        title: "Uploaded!",
+                                        sound: "chime.aiff",
+                                        fireDate: new Date(),
+                                    });
                                     Vibration.vibrate(3000);
                                 }).catch(err => { console.log(err) });
                         }).catch(err => { console.log(err) });
