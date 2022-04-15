@@ -2,7 +2,7 @@ import { StyleSheet, Image, View, Text } from 'react-native'
 import React from 'react'
 import Palette from '../theme/Palette';
 
-const MyImage = ({ uri, location }) => {
+const MyImage = ({ uri, location, userName }) => {
     return (
         <View style={styles.container}>
             <Image
@@ -11,7 +11,10 @@ const MyImage = ({ uri, location }) => {
             />
             <View style={styles.textContainer}>
                 <Text style={styles.text}>
-                    {location}
+                    Added by: {userName}
+                </Text>
+                <Text style={styles.text}>
+                    Location: {location}
                 </Text>
             </View>
         </View>
@@ -22,15 +25,16 @@ export default MyImage;
 
 const styles = StyleSheet.create({
     container: {
-        width: 100,
-        height: 180,
-        margin: 10.0,
+        marginVertical: 10,
     },
     image: {
-        width: 100,
-        height: 100,
+        width: '100%',
+        height: 200,
+        resizeMode: 'contain',
     },
     textContainer: {
+        marginHorizontal: 40,
+        marginVertical: 10,
         backgroundColor: Palette.secondary,
     },
     text: {

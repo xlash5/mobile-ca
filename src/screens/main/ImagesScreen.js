@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, Vibration } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Palette from '../../theme/Palette';
 import auth from '@react-native-firebase/auth';
@@ -11,10 +11,12 @@ import MyImage from '../../components/MyImage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ImageButton from '../../components/ImageButton';
 import GetLocation from 'react-native-get-location'
+import API_KEY from '../../constants/API_KEY';
+import axios from 'axios';
 
 const ImagesScreen = ({ navigation }) => {
     const [image, setImage] = useState(null);
-    const imagesRef = firestore().collection('users').doc(auth().currentUser.uid).collection('images');
+    const imagesRef = firestore().collection('images');
     const fetchImageData = () => {
         let arr = [];
         imagesRef.get().then(querySnapshot => {
@@ -29,25 +31,37 @@ const ImagesScreen = ({ navigation }) => {
         fetchImageData();
     }, [])
 
-    const getCoordsString = async () => {
-        let coordsString = '';
+    const getCoords = async () => {
+        let coords = {}
         await GetLocation.getCurrentPosition({
             enableHighAccuracy: true,
             timeout: 15000,
         })
             .then(location => {
-                coordsString = `latitude: ${location.latitude}, longitude: ${location.longitude}`;
+                coords = {
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                }
             })
             .catch(error => {
                 const { code, message } = error;
                 console.warn(code, message);
                 return coordsString;
             })
-        return coordsString;
+        return coords;
+    }
+
+    const getCityByCoords = async (coords) => {
+        let rCity = 'Not Found';
+        await axios.get(`http://api.positionstack.com/v1/reverse?access_key=${API_KEY}&query=${coords.latitude},${coords.longitude}`)
+            .then(res => {
+                rCity = res.data.data[0].locality;
+            }).catch(err => { console.log(err) });
+        return rCity;
     }
 
     const uploadImage = async () => {
-        let coords = await getCoordsString();
+        let city = await getCityByCoords(await getCoords());
 
         await launchImageLibrary({}, async (response) => {
             if (response.didCancel) {
@@ -64,13 +78,15 @@ const ImagesScreen = ({ navigation }) => {
                         .then(url => {
                             imagesRef
                                 .add({
-                                    location: coords,
+                                    user: auth().currentUser.displayName,
+                                    location: city,
                                     url: url,
                                     time: Date.now(),
                                 })
                                 .then(() => {
                                     fetchImageData();
                                     console.log('Image Added!');
+                                    Vibration.vibrate(3000);
                                 }).catch(err => { console.log(err) });
                         }).catch(err => { console.log(err) });
                 }).catch(err => { console.log(err) });
@@ -79,7 +95,7 @@ const ImagesScreen = ({ navigation }) => {
     }
 
     const uploadImageFromCamera = async () => {
-        let coords = await getCoordsString();
+        let city = await getCityByCoords(await getCoords());
 
         await launchCamera({}, async (response) => {
             if (response.didCancel) {
@@ -96,13 +112,15 @@ const ImagesScreen = ({ navigation }) => {
                         .then(url => {
                             imagesRef
                                 .add({
-                                    location: coords,
+                                    user: auth().currentUser.displayName,
+                                    location: city,
                                     url: url,
                                     time: Date.now(),
                                 })
                                 .then(() => {
                                     fetchImageData();
                                     console.log('Image Added!');
+                                    Vibration.vibrate(3000);
                                 }).catch(err => { console.log(err) });
                         }).catch(err => { console.log(err) });
                 }).catch(err => { console.log(err) });
@@ -116,10 +134,11 @@ const ImagesScreen = ({ navigation }) => {
                 <ImageButton text="Add From Gallery" icon="images" onPress={uploadImage} />
                 <ImageButton text="Add From Camera" icon="camera" onPress={uploadImageFromCamera} />
             </View>
-            {image && image.map((item, index) => {
-                return <MyImage key={index} uri={item.url} location={item.location} />
-            })}
-
+            <ScrollView style={styles.imagesContainer}>
+                {image && image.map((item, index) => {
+                    return <MyImage key={index} uri={item.url} location={item.location} userName={item.user} />
+                })}
+            </ScrollView>
         </View>
     )
 }
@@ -127,11 +146,6 @@ const ImagesScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginTop: 10.0,
     },
     buttonsContainer: {
         flexDirection: 'row',
