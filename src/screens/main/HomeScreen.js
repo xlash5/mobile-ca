@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Palette from '../../theme/Palette';
 import auth from '@react-native-firebase/auth';
-import { Button, Avatar } from 'react-native-paper';
+import { Avatar } from 'react-native-paper';
 
 const HomeScreen = () => {
     return (

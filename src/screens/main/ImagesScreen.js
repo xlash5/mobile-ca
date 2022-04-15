@@ -7,15 +7,16 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import MyImage from '../../components/MyImage';
 import ImageButton from '../../components/ImageButton';
-import GetLocation from 'react-native-get-location'
-import API_KEY from '../../constants/API_KEY';
-import axios from 'axios';
 import { Notifications } from 'react-native-notifications';
+import LottieView from 'lottie-react-native';
+import getCoords from '../../functions/getCoords';
+import getCityByCoords from '../../functions/getCityByCoords';
 
 const ImagesScreen = ({ navigation }) => {
     const [image, setImage] = useState(null);
     const [fullScreen, setFullScreen] = useState(false);
     const [imageUrl, setImageUrl] = useState('')
+    const [loading, setLoading] = useState(false);
 
     const imagesRef = firestore().collection('images');
     const fetchImageData = () => {
@@ -32,35 +33,6 @@ const ImagesScreen = ({ navigation }) => {
         fetchImageData();
     }, [])
 
-    const getCoords = async () => {
-        let coords = {}
-        await GetLocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 15000,
-        })
-            .then(location => {
-                coords = {
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                }
-            })
-            .catch(error => {
-                const { code, message } = error;
-                console.warn(code, message);
-                return coordsString;
-            })
-        return coords;
-    }
-
-    const getCityByCoords = async (coords) => {
-        let rCity = 'Not Found';
-        await axios.get(`http://api.positionstack.com/v1/reverse?access_key=${API_KEY}&query=${coords.latitude},${coords.longitude}`)
-            .then(res => {
-                rCity = res.data.data[0].locality;
-            }).catch(err => { console.log(err) });
-        return rCity;
-    }
-
     const uploadImage = async () => {
         let city = await getCityByCoords(await getCoords());
 
@@ -74,6 +46,7 @@ const ImagesScreen = ({ navigation }) => {
             } else {
                 const imageRef = storage().refFromURL(`gs://mobile-ca-40a35.appspot.com/${auth().currentUser.uid}/${response.assets[0].fileName}`);
 
+                setLoading(true);
                 imageRef.putFile(response.assets[0].uri).then(() => {
                     imageRef.getDownloadURL()
                         .then(url => {
@@ -86,6 +59,7 @@ const ImagesScreen = ({ navigation }) => {
                                 })
                                 .then(() => {
                                     fetchImageData();
+                                    setLoading(false);
                                     console.log('Image Added!');
                                     Notifications.postLocalNotification({
                                         body: "Your image has been uploaded!",
@@ -114,6 +88,7 @@ const ImagesScreen = ({ navigation }) => {
             } else {
                 const imageRef = storage().refFromURL(`gs://mobile-ca-40a35.appspot.com/${auth().currentUser.uid}/${response.assets[0].fileName}`);
 
+                setLoading(true);
                 imageRef.putFile(response.assets[0].uri).then(() => {
                     imageRef.getDownloadURL()
                         .then(url => {
@@ -126,6 +101,7 @@ const ImagesScreen = ({ navigation }) => {
                                 })
                                 .then(() => {
                                     fetchImageData();
+                                    setLoading(false);
                                     console.log('Image Added!');
                                     Notifications.postLocalNotification({
                                         body: "Your image has been uploaded!",
@@ -157,6 +133,10 @@ const ImagesScreen = ({ navigation }) => {
                     }}>Close</Button>
             </View>
         )
+    }
+
+    if (loading) {
+        return <LottieView source={require('../../assets/animations/loading.json')} autoPlay loop={false} />
     }
 
     return (
