@@ -1,23 +1,25 @@
-import { StyleSheet, Image, View, Text } from 'react-native'
+import { StyleSheet, Image, View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Palette from '../theme/Palette';
 
-const MyImage = ({ uri, location, userName }) => {
+const MyImage = ({ uri, location, userName, onPress }) => {
     return (
-        <View style={styles.container}>
-            <Image
-                style={styles.image}
-                source={{ uri: uri }}
-            />
-            <View style={styles.textContainer}>
-                <Text style={styles.text}>
-                    Added by: {userName}
-                </Text>
-                <Text style={styles.text}>
-                    Location: {location}
-                </Text>
+        <TouchableOpacity onPress={onPress}>
+            <View style={styles.container}>
+                <Image
+                    style={styles.image}
+                    source={{ uri: uri }}
+                />
+                <View style={styles.textContainer}>
+                    <Text style={styles.text}>
+                        Added by: {userName}
+                    </Text>
+                    <Text style={styles.text}>
+                        Location: {location}
+                    </Text>
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

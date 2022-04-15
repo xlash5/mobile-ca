@@ -1,14 +1,11 @@
-import { View, Text, Image, StyleSheet, ScrollView, Vibration } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import Palette from '../../theme/Palette';
-import auth from '@react-native-firebase/auth';
-import LottieView from 'lottie-react-native';
+import { View, Image, StyleSheet, ScrollView, Vibration } from 'react-native';
 import { Button } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import auth from '@react-native-firebase/auth';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import MyImage from '../../components/MyImage';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import ImageButton from '../../components/ImageButton';
 import GetLocation from 'react-native-get-location'
 import API_KEY from '../../constants/API_KEY';
@@ -16,6 +13,9 @@ import axios from 'axios';
 
 const ImagesScreen = ({ navigation }) => {
     const [image, setImage] = useState(null);
+    const [fullScreen, setFullScreen] = useState(false);
+    const [imageUrl, setImageUrl] = useState('')
+
     const imagesRef = firestore().collection('images');
     const fetchImageData = () => {
         let arr = [];
@@ -128,6 +128,24 @@ const ImagesScreen = ({ navigation }) => {
         });
     }
 
+
+    if (fullScreen) {
+        return (
+            <View>
+                <Image
+                    style={{ height: '90%', width: '100%', resizeMode: 'contain' }}
+                    source={{ uri: imageUrl }}
+                />
+                <Button
+                    mode="contained"
+                    onPress={() => {
+                        console.log('clicked');
+                        setFullScreen(false);
+                    }}>Close</Button>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.screen}>
             <View style={styles.buttonsContainer}>
@@ -136,7 +154,15 @@ const ImagesScreen = ({ navigation }) => {
             </View>
             <ScrollView style={styles.imagesContainer}>
                 {image && image.map((item, index) => {
-                    return <MyImage key={index} uri={item.url} location={item.location} userName={item.user} />
+                    return <MyImage
+                        key={index}
+                        uri={item.url}
+                        location={item.location}
+                        userName={item.user}
+                        onPress={() => {
+                            setImageUrl(item.url)
+                            setFullScreen(true)
+                        }} />
                 })}
             </ScrollView>
         </View>

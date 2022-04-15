@@ -13,9 +13,9 @@ const LoginScreen = ({ navigation }) => {
     const [error, setError] = useState(false);
 
     const LoginEvent = () => {
-        if (email || password === '' || null) {
+        if (email === '' || password === '') {
             setError(true);
-            return
+            return;
         }
         auth()
             .signInWithEmailAndPassword(email, password)

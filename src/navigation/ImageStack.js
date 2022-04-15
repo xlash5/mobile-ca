@@ -4,36 +4,17 @@ import { Button } from 'react-native-paper';
 import { createStackNavigator } from '@react-navigation/stack';
 import Palette from '../theme/Palette';
 import ImagesScreen from '../screens/main/ImagesScreen';
-
-function FirstScreen({ navigation }) {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>First!</Text>
-            <Button
-                onPress={() => {
-                    navigation.navigate('Second');
-                }}
-                mode="contained"
-                color={Palette.primary}>GO</Button>
-        </View>
-    );
-}
-function SecondScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Second!</Text>
-        </View>
-    );
-}
+import LogoutButtonOptions from '../constants/LogoutButtonOptions';
 
 const Stack = createStackNavigator();
 
 export default function ImageStack() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="ProfileHome" component={ImagesScreen} options={{ headerShown: true }} />
-            <Stack.Screen name="First" component={FirstScreen} />
-            <Stack.Screen name="Second" component={SecondScreen} />
+            <Stack.Screen
+                name="Images"
+                component={ImagesScreen}
+                options={LogoutButtonOptions} />
         </Stack.Navigator>
     );
 }
