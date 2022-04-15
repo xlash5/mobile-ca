@@ -64,7 +64,7 @@ const SignUpScreen = () => {
                         mode="contained"
                         onPress={SignUpEvent}
                         color={Palette.primary}>
-                        Login
+                        Sign Up
                     </Button>
                     {error && <RedText text={"Something went wrong.."} />}
                 </ScrollView>

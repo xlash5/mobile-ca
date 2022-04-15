@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,6 +10,7 @@ import auth from '@react-native-firebase/auth';
 import LottieView from 'lottie-react-native';
 import HomeScreen from '../screens/main/HomeScreen';
 import LogoutButtonOptions from '../constants/LogoutButtonOptions';
+import Screen from '../components/Screen';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +33,12 @@ export default function Navigation() {
     }, [auth()])
 
     if (showSplashScreen) {
-        return <LottieView source={require('../assets/animations/splash.json')} autoPlay loop={false} />
+        return <Screen>
+            <Image
+                source={require('../assets/animations/splash.jpeg')}
+                style={{ width: '100%', resizeMode: 'contain' }}
+            />
+        </Screen>
     }
 
 

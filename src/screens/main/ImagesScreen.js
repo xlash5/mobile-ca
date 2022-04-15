@@ -1,4 +1,4 @@
-import { View, Image, StyleSheet, ScrollView, Vibration } from 'react-native';
+import { View, Image, StyleSheet, FlatList, Vibration } from 'react-native';
 import { Button } from 'react-native-paper';
 import React, { useState, useEffect } from 'react';
 import auth from '@react-native-firebase/auth';
@@ -36,7 +36,7 @@ const ImagesScreen = ({ navigation }) => {
     const uploadImage = async () => {
         let city = await getCityByCoords(await getCoords());
 
-        await launchImageLibrary({}, async (response) => {
+        await launchImageLibrary({ quality: 0.1 }, async (response) => {
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             } else if (response.error) {
@@ -78,7 +78,7 @@ const ImagesScreen = ({ navigation }) => {
     const uploadImageFromCamera = async () => {
         let city = await getCityByCoords(await getCoords());
 
-        await launchCamera({}, async (response) => {
+        await launchCamera({ quality: 0.1 }, async (response) => {
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             } else if (response.error) {
@@ -136,7 +136,7 @@ const ImagesScreen = ({ navigation }) => {
     }
 
     if (loading) {
-        return <LottieView source={require('../../assets/animations/loading.json')} autoPlay loop={false} />
+        return <LottieView source={require('../../assets/animations/loading.json')} autoPlay />
     }
 
     return (
@@ -145,19 +145,18 @@ const ImagesScreen = ({ navigation }) => {
                 <ImageButton text="Add From Gallery" icon="images" onPress={uploadImage} />
                 <ImageButton text="Add From Camera" icon="camera" onPress={uploadImageFromCamera} />
             </View>
-            <ScrollView style={styles.imagesContainer}>
-                {image && image.map((item, index) => {
-                    return <MyImage
-                        key={index}
-                        uri={item.url}
-                        location={item.location}
-                        userName={item.user}
-                        onPress={() => {
-                            setImageUrl(item.url)
-                            setFullScreen(true)
-                        }} />
-                })}
-            </ScrollView>
+            {image && <FlatList
+                data={image}
+                renderItem={({ item }) => <MyImage
+                    uri={item.url}
+                    location={item.location}
+                    userName={item.user}
+                    onPress={() => {
+                        setImageUrl(item.url)
+                        setFullScreen(true)
+                    }} />}
+                keyExtractor={item => item.time}
+            />}
         </View>
     )
 }
