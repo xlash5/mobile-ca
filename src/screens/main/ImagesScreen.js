@@ -52,7 +52,7 @@ const ImagesScreen = ({ navigation }) => {
                         .then(url => {
                             imagesRef
                                 .add({
-                                    user: auth().currentUser.displayName,
+                                    user: auth().currentUser.displayName ? auth().currentUser.displayName : auth().currentUser.email,
                                     location: city,
                                     url: url,
                                     time: Date.now(),
@@ -94,7 +94,7 @@ const ImagesScreen = ({ navigation }) => {
                         .then(url => {
                             imagesRef
                                 .add({
-                                    user: auth().currentUser.displayName,
+                                    user: auth().currentUser.displayName ? auth().currentUser.displayName : auth().currentUser.email,
                                     location: city,
                                     url: url,
                                     time: Date.now(),
