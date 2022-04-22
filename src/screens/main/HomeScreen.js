@@ -1,15 +1,35 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Palette from '../../theme/Palette';
 import auth from '@react-native-firebase/auth';
+import { Button } from 'react-native-paper';
+import ContactContainer from '../../components/ContactContainer';
 
 const HomeScreen = () => {
+    const [notes, setNotes] = useState([{ note: 'Call This', number: '241-867-5309' }]);
     return (
-        <View style={styles.screen}>
+        <ScrollView>
             <Text style={styles.text}>Welcome!</Text>
             <View style={styles.empty}></View>
             <Text style={styles.text}>Email: {auth().currentUser.email}</Text>
-        </View>
+            {notes.map((note) => {
+                return (
+                    <ContactContainer note={note.note} number={note.number} />
+                )
+            }
+            )}
+            <Button
+                icon="contacts"
+                mode="contained"
+                onPress={() => {
+                    auth().signOut().then(() => {
+                        console.log("Logout Success");
+                    }).catch(error => {
+                        console.log(error)
+                    });
+                }}
+                style={{ marginHorizontal: 10 }}>Select From Contacts</Button>
+        </ScrollView>
     );
 }
 
@@ -28,5 +48,5 @@ const styles = StyleSheet.create({
     },
     empty: {
         height: 20.0,
-    }
+    },
 })
