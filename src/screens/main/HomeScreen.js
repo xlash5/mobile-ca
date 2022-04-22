@@ -1,33 +1,53 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, PermissionsAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Palette from '../../theme/Palette';
 import auth from '@react-native-firebase/auth';
 import { Button } from 'react-native-paper';
 import ContactContainer from '../../components/ContactContainer';
+import { selectContactPhone } from 'react-native-select-contact';
 
 const HomeScreen = () => {
-    const [notes, setNotes] = useState([{ note: 'Call This', number: '241-867-5309' }]);
+    const [notes, setNotes] = useState([]);
+
+    const addNotes = async () => {
+        PermissionsAndroid.requestMultiple([PermissionsAndroid.PERMISSIONS.READ_CONTACTS, PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS], {
+            'title': 'Contacts',
+            'message': 'This app would like to view your contacts.'
+        }).then(() => {
+            selectContactPhone()
+                .then(selection => {
+                    if (!selection) {
+                        return;
+                    }
+
+                    let { contact, selectedPhone } = selection;
+                    setNotes([...notes, { name: contact.name, number: selectedPhone.number }]);
+                }).catch(err => { console.log(err) });
+        }
+        ).catch(err => {
+            console.log(err);
+        }
+        );
+
+    }
+
     return (
         <ScrollView>
             <Text style={styles.text}>Welcome!</Text>
             <View style={styles.empty}></View>
             <Text style={styles.text}>Email: {auth().currentUser.email}</Text>
+            <View style={styles.empty}></View>
+            <Text style={styles.text}>Remember to call this phone numbers!</Text>
             {notes.map((note) => {
                 return (
-                    <ContactContainer note={note.note} number={note.number} />
+                    <ContactContainer name={note.name} number={note.number} />
                 )
             }
             )}
             <Button
                 icon="contacts"
                 mode="contained"
-                onPress={() => {
-                    auth().signOut().then(() => {
-                        console.log("Logout Success");
-                    }).catch(error => {
-                        console.log(error)
-                    });
-                }}
+                onPress={addNotes}
                 style={{ marginHorizontal: 10 }}>Select From Contacts</Button>
         </ScrollView>
     );
@@ -47,6 +67,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     empty: {
-        height: 20.0,
+        height: 5.0,
     },
 })

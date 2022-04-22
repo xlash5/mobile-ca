@@ -2,10 +2,10 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Palette from '../theme/Palette';
 
-const ContactContainer = ({ note, number }) => {
+const ContactContainer = ({ name, number }) => {
     return (
         <View style={styles.contactContainer}>
-            <Text style={styles.text}>{note} - </Text>
+            <Text style={styles.text}>{name} - </Text>
             <Text style={styles.text}>{number}</Text>
         </View>
     )
